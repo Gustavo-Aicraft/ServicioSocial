@@ -1,0 +1,13 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.log
+.venv/
+.env
+
+# Manim (renders/cache)
+media/
+
+# IDE
+.vscode/
+.idea/

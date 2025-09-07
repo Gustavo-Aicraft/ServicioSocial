@@ -12,27 +12,21 @@ class RegresionLineal(Scene):
         self.play(Write(title, run_time=write_speed))
         self.wait(2)
         self.play(FadeOut(title))
-
-        # Primer párrafo
         p1 = Tex(
             r"El objetivo de la regresión es predecir el valor de una o más "
             r"variables objetivo dado un vector de variables de entrada.",
             font_size=36    
         )
 
-        # Ecuación intermedia
         eq =MathTex(
             r"y = w_0 + w_1 x_1",
             font_size=40
         )
-
-        # Colorear partes llamativas
         eq.set_color_by_tex(r"y", YELLOW)
         eq.set_color_by_tex(r"x_1", BLUE)
         eq.set_color_by_tex(r"w_0", GREEN)
         eq.set_color_by_tex(r"w_1", GREEN)
 
-        # Segundo párrafo
         p2 = Tex(
             r"Denotamos ",
             r"$y(x,w)$",
@@ -57,13 +51,11 @@ class RegresionLineal(Scene):
             color=PURPLE
         )
 
-        # Posicionamiento
         p1.move_to(ORIGIN + UP*1.8)
         eq.next_to(p1, DOWN, buff=0.5)
         p2.next_to(eq, DOWN, buff=0.5)
         eq2.next_to(p2, DOWN, buff=0.8)
 
-        # Animaciones
         self.play(Write(p1, run_time=write_speed))
         self.play(Write(eq, run_time=write_speed))
         self.play(Write(p2, run_time=write_speed))
@@ -73,7 +65,7 @@ class RegresionLineal(Scene):
         self.play(FadeOut(VGroup(p1, eq, p2, eq2)))
 
 
-        # --- Slide 2, parte B: Animación de regresión lineal ---
+        # --- Slide 2 B
         axes = Axes(x_range=[0,6], y_range=[0,10], axis_config={"color": BLUE}).scale(0.8).to_edge(DOWN)
         labels = axes.get_axis_labels(x_label="x", y_label="y")
         self.play(Create(axes), Write(labels))
@@ -95,7 +87,7 @@ class RegresionLineal(Scene):
 
         self.play(FadeOut(VGroup(axes, labels, dots, linea, formula1)))
 
-        # --- Slide 3: Basis Functions ---
+        # --- Slide 3: Funciones Base
         basis_title = Tex("Funciones base", font_size=44).to_edge(UP)
         basis_title.set_color_by_tex("Funciones base", ORANGE)
         self.play(Write(basis_title, run_time=write_speed))
@@ -186,12 +178,12 @@ class RegresionLineal(Scene):
         top_y  = 1.8
         vgap   = 1.4
         radius = 0.45
-
         out_node2 = Circle(radius=radius, color=BLUE, stroke_width=4).set_fill("#90CAF9", opacity=0.35)
         out_node2.move_to(RIGHT*3.2 + UP*0.2)
         out_label2 = MathTex(r"y(\mathbf{x},\mathbf{w})").scale(0.9)
         out_label2.next_to(out_node2, RIGHT, buff=0.35)
-        out_label2.set_color_by_tex(r"y(\mathbf{x},\mathbf{w})", YELLOW)
+        out_label2.set_color(WHITE)
+        out_label2.set_color_by_tex("y", YELLOW)
         out_label2.set_color_by_tex(r"\mathbf{x}", BLUE)
         out_label2.set_color_by_tex(r"\mathbf{w}", GREEN)
 
@@ -205,21 +197,46 @@ class RegresionLineal(Scene):
 
         vdots2 = MathTex(r"\vdots").move_to([left_x, (node_top2.get_y()+node_mid2.get_y())/2, 0])
 
-        a_top2 = Arrow(node_top2.get_right(),    out_node2.get_left(), buff=0.05, stroke_width=6)  
-        a_mid2 = Arrow(node_mid2.get_right(),    out_node2.get_left(), buff=0.05, stroke_width=6)  
-        a_bot2 = Arrow(node_bottom2.get_right(), out_node2.get_left(), buff=0.05, stroke_width=6)  
-        weight_labels = [
-            (MathTex(r"w_{M-1}", color=GREEN).scale(0.9), a_top2, UP*0.40),   
-            (MathTex(r"w_{1}",    color=GREEN).scale(0.9), a_mid2, DOWN*0.60),
-            (MathTex(r"w_{0}",    color=GREEN).scale(0.9), a_bot2, UP*0.80),  
-        ]
+        a_top2 = Arrow(node_top2.get_right(),    out_node2.get_left(), buff=0.05, stroke_width=6)
+        a_mid2 = Arrow(node_mid2.get_right(),    out_node2.get_left(), buff=0.05, stroke_width=6)
+        a_bot2 = Arrow(node_bottom2.get_right(), out_node2.get_left(), buff=0.05, stroke_width=6)
 
-        w_top2, w_mid2, w_bot2 = [lab.move_to(ar.point_from_proportion(0.55) + off) or lab
-                                for (lab, ar, off) in weight_labels]
-    
+       
+        def label_for_arrow(arrow, tex, *, t=0.58, dn=0.62, side=1):
+            """
+            Coloca una etiqueta MathTex en la flecha 'arrow' a la altura 't' (0..1),
+            separada 'dn' en la dirección perpendicular. side=+1 arriba, -1 abajo.
+            """
+            lab = MathTex(tex, color=GREEN).scale(0.9)
+            p = arrow.point_from_proportion(t)
+            v = arrow.get_end() - arrow.get_start()
+            v = v / np.linalg.norm(v)
+            n = np.array([-v[1], v[0], 0.0]) * side  # normal 90°
+            lab.move_to(p + dn * n)
+            bg = BackgroundRectangle(lab, fill_color=BLACK, fill_opacity=1.0, stroke_width=0, buff=0.02)
+            return VGroup(bg, lab)
+
+        w_top2 = label_for_arrow(a_top2, r"w_{M-1}", t=0.44, dn=0.64, side=+1)
+        w_mid2 = label_for_arrow(a_mid2, r"w_{0}",    t=0.54, dn=0.66, side=-1)
+        w_bot2 = label_for_arrow(a_bot2, r"w_{1}",    t=0.64, dn=0.68, side=+1)
+
         eq_basis2 = MathTex(
-            r"y(\mathbf{x}, \mathbf{w}) = w_0\,\phi_0(\mathbf{x}) + w_1\,\phi_1(\mathbf{x}) + \cdots + w_{M-1}\,\phi_{M-1}(\mathbf{x})"
-        ).scale(0.85).to_edge(DOWN).set_color(YELLOW)
+            r"y(\mathbf{x},\mathbf{w}) =",
+            r"w_{0}\,\phi_{0}(\mathbf{x})",
+            r"+\,w_{1}\,\phi_{1}(\mathbf{x})",
+            r"+\,\cdots",
+            r"+\,w_{M-1}\,\phi_{M-1}(\mathbf{x})",
+        ).scale(0.90).to_edge(DOWN, buff=0.55)
+
+        eq_basis2[0].set_color_by_tex_to_color_map({
+            r"y": YELLOW, r"\mathbf{x}": BLUE, r"\mathbf{w}": GREEN
+        })
+        for i in (1, 2, 4):
+            eq_basis2[i].set_color(WHITE)
+            eq_basis2[i].set_color_by_tex_to_color_map({
+                r"w_{": GREEN, r"\phi": YELLOW, r"\mathbf{x}": BLUE
+            })
+        eq_basis2_bg = BackgroundRectangle(eq_basis2, fill_color=BLACK, fill_opacity=1.0, stroke_width=0, buff=0.08)
 
         self.play(LaggedStart(Create(node_top2), Create(node_mid2), Create(node_bottom2),
                               lag_ratio=0.15, run_time=1.0))
@@ -230,7 +247,10 @@ class RegresionLineal(Scene):
         self.play(LaggedStart(GrowArrow(a_top2), GrowArrow(a_mid2), GrowArrow(a_bot2),
                               lag_ratio=0.12, run_time=1.0))
         self.play(FadeIn(w_top2), FadeIn(w_mid2), FadeIn(w_bot2), run_time=0.6)
-        self.play(Write(eq_basis2), run_time=0.9)
+        self.bring_to_front(w_top2, w_mid2, w_bot2)
+
+        self.play(FadeIn(eq_basis2_bg), Write(eq_basis2), run_time=0.9)
+        self.bring_to_front(eq_basis2)
 
         dot2 = Dot(radius=0.07, color=YELLOW).move_to(a_bot2.get_start())
         self.add(dot2)
@@ -243,9 +263,10 @@ class RegresionLineal(Scene):
             node_top2, node_mid2, node_bottom2,
             phi_top2, phi_mid2, phi_bot2, vdots2,
             a_top2, a_mid2, a_bot2, w_top2, w_mid2, w_bot2,
-            out_node2, out_label2, eq_basis2
+            out_node2, out_label2, eq_basis2, eq_basis2_bg
         )))
-         # --- Slide: Múltiples salidas (título + contenido centrado) ---
+
+         # --- Slide: Múltiples salidas---
         title_mout = Tex("Múltiples salidas", font_size=44).to_edge(UP)
         title_mout.set_color_by_tex("Múltiples salidas", ORANGE)
 
@@ -270,7 +291,6 @@ class RegresionLineal(Scene):
         eq_model_mo.set_color_by_tex("W", GREEN)
         eq_model_mo.set_color_by_tex(r"\phi", GREEN)
 
-        # >>> DEFINICIONES PARTIDAS EN FRAGMENTOS PARA COLOREAR SOLO LAS FÓRMULAS <<<
         def1 = Tex(
             r"donde ", r"$y$", r" es un vector columna de dimensión ", r"$K$", r", ",
             r"$W$", r" es una matriz de parámetros de dimensión ", r"$M\times K$", r" y ",
@@ -294,7 +314,7 @@ class RegresionLineal(Scene):
         )
 
         content = VGroup(intro, eq_tvec, approach, eq_model_mo, def1, def2, note).arrange(DOWN, buff=0.35)
-        content.next_to(title_mout, DOWN, buff=0.6).set_x(0)  # centrado
+        content.next_to(title_mout, DOWN, buff=0.6).set_x(0)
 
         self.play(Write(title_mout, run_time=write_speed))
         for m in content:
@@ -302,8 +322,7 @@ class RegresionLineal(Scene):
         self.wait(2)
         self.play(FadeOut(VGroup(title_mout, content)))
 
-
-          # --- Slide: Múltiples salidas ---
+          # --- Slide B: Múltiples salidas
         left_x, right_x = -4.2, 3.6
         top_y, mid_y, bot_y = 1.6, 0.1, -1.4
         radius = 0.45
@@ -338,8 +357,6 @@ class RegresionLineal(Scene):
             Arrow(in_mid.get_right(), out_mid.get_left(), buff=0.05, stroke_width=6),
             Arrow(in_bot.get_right(), out_mid.get_left(), buff=0.05, stroke_width=6),
         )
-
-        # Animación
         self.play(LaggedStart(Create(in_top), Create(in_mid), Create(in_bot), lag_ratio=0.15, run_time=1.0))
         self.play(Write(phi_top), Write(phi_mid), Write(phi_bot), run_time=0.8)
         self.play(FadeIn(vdots_L, scale=0.9), run_time=0.3)
@@ -347,7 +364,6 @@ class RegresionLineal(Scene):
         self.play(LaggedStart(Create(out_top), Create(out_mid), lag_ratio=0.15, run_time=0.8))
         self.play(Write(yK), Write(y1), run_time=0.8)
 
-        # Posicionar y mostrar los puntos suspensivos entre los dos nodos de salida
         vdots_R.move_to((out_top.get_center() + out_mid.get_center())/2 + LEFT*0.8)
         self.play(FadeIn(vdots_R, scale=0.9), run_time=0.3)
 
@@ -357,4 +373,5 @@ class RegresionLineal(Scene):
             in_top, in_mid, in_bot, phi_top, phi_mid, phi_bot, vdots_L,
             out_top, out_mid, yK, y1, vdots_R, conns
         )))
-#manim -pqh RegresionLineal.py RegresionLineal
+
+#manim -pqh RegresiónLineal.py RegresionLineal
