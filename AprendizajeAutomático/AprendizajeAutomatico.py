@@ -190,7 +190,7 @@ class MachineLearning(Scene):
             font_size=38
         )
         for m in (e1, e2, e3):
-            colorize(m)  # solo colorea MathTex
+            colorize(m)  
 
         txt_emp = Tex(
             r"donde este ultimo termino es una estimación empírica del error a partir de una muestra de los datos.",
@@ -237,7 +237,6 @@ class MachineLearning(Scene):
             font_size=32
         ).set_color(WHITE)
 
-        # Bloques y auto-fit al área segura del frame
         th_block = VGroup(th_title, th_line).arrange(DOWN, buff=0.20)
         exp_block = VGroup(exp1, exp2, exp3, exp4, txt_sig).arrange(DOWN, buff=0.10)
         blk = VGroup(th_block, exp_block).arrange(DOWN, buff=0.28)
@@ -250,8 +249,7 @@ class MachineLearning(Scene):
         if blk.height > SAFE_H:
             blk.set_height(SAFE_H)
         blk.move_to(ORIGIN)
-
-        # Animación
+        
         self.play(Write(blk, run_time=write_speed))
         self.wait(0.6)
         self.play(FadeOut(blk))
@@ -291,12 +289,11 @@ class MachineLearning(Scene):
 
         body_pg.move_to(ORIGIN)
 
-        # Animación
         self.play(Write(body_pg, run_time=write_speed))
         self.wait(0.6)
         self.play(FadeOut(body_pg))
 
-        # Animación: Proceso Gaussiano 
+        # Proceso Gaussiano 
         ax = Axes(
             x_range=[-4, 4, 1],
             y_range=[0, 1.05, 0.25],
@@ -375,37 +372,29 @@ class MachineLearning(Scene):
         x_tok = MathTex(r"\mathbf{x}", color=BLUE).scale(1.05)
         f1 = _func_box(r"f_1"); f2 = _func_box(r"f_2"); fk = _func_box(r"f_k")
         y_tok = MathTex(r"y", color=ORANGE).scale(1.05)
-
-        # Fila de cajas (dejamos hueco para cdots entre f2 y fk)
+        
         pipe_boxes = VGroup(x_tok, f1, f2, fk, y_tok).arrange(RIGHT, buff=0.6).move_to(DOWN*1.6)
 
-        # Reposicionar fk y y para insertar \cdots
         cd = MathTex(r"\cdots").set_color(GREY_B).scale(1.0)
         cd.move_to(midpoint(f2.get_right(), fk.get_left()))
-        # Ajuste fino: separa f2 y fk para que quepa cd con buen margen
         fk.shift(0.35*RIGHT); y_tok.shift(0.35*RIGHT); cd.shift(0.12*LEFT)
 
-        # Flechas (f2 -> cdots -> fk) y resto
         a01 = Arrow(x_tok.get_right(), f1.get_left(), buff=0.1, color=GREY_B)
         a12 = Arrow(f1.get_right(),   f2.get_left(), buff=0.1, color=GREY_B)
-        a2d = Arrow(f2.get_right(),   cd.get_left(),  buff=0.10, color=GREY_B)   # NUEVO
-        adk = Arrow(cd.get_right(),   fk.get_left(),  buff=0.10, color=GREY_B)   # NUEVO
+        a2d = Arrow(f2.get_right(),   cd.get_left(),  buff=0.10, color=GREY_B)   
+        adk = Arrow(cd.get_right(),   fk.get_left(),  buff=0.10, color=GREY_B)  
         aky = Arrow(fk.get_right(),   y_tok.get_left(), buff=0.1, color=GREY_B)
 
-        # Punto que viaja
         dot = Dot(radius=0.08, color=YELLOW).move_to(x_tok.get_right()+RIGHT*0.05)
 
-        # Agrupa TODO lo que debe moverse junto (evita que se “queden” objetos al subir)
         pipe_group = VGroup(x_tok, f1, f2, cd, fk, y_tok, a01, a12, a2d, adk, aky, dot)
 
-        # Entrada
         self.play(FadeIn(x_tok), Create(f1), Create(a01))
         self.play(Create(f2), Create(a12))
-        self.play(FadeIn(cd), Create(a2d))         # muestra los puntos suspensivos y su flecha
+        self.play(FadeIn(cd), Create(a2d))       
         self.play(Create(fk), Create(adk))
         self.play(FadeIn(y_tok), Create(aky))
 
-        # Recorrido del punto (actualizado con dos tramos: a2d y adk)
         self.play(FadeIn(dot))
         self.play(MoveAlongPath(dot, a01.copy()), run_time=0.5); self.play(Indicate(f1, color=GREEN), run_time=0.3)
         self.play(MoveAlongPath(dot, a12.copy()), run_time=0.5); self.play(Indicate(f2, color=GREEN), run_time=0.3)
@@ -413,18 +402,15 @@ class MachineLearning(Scene):
         self.play(MoveAlongPath(dot, adk.copy()), run_time=0.45)
         self.play(MoveAlongPath(dot, aky.copy()), run_time=0.5); self.play(Flash(y_tok, color=ORANGE, flash_radius=0.5), run_time=0.4)
 
-        # Cadena debajo
         comp_chain = MathTex(r"f_k \circ f_{k-1} \circ \cdots \circ f_1", font_size=34)
         colorize(comp_chain, {r"f": GREEN})
         comp_chain.next_to(pipe_group, DOWN, buff=0.35)
 
         self.play(Write(comp_chain), run_time=0.6); self.wait(0.6)
 
-        # SUBIR TODO JUNTO (incluye flechas y punto)
         container = VGroup(head, pipe_group, comp_chain)
         self.play(container.animate.arrange(DOWN, buff=0.6).move_to(ORIGIN), run_time=0.6)
 
-        # Salida limpia
         self.play(FadeOut(container))
 
         # ===== Slide 8 =====
@@ -492,28 +478,22 @@ class MachineLearning(Scene):
         scale = min(1.0, max_h / container.height, max_w / container.width)
         container.scale(scale).move_to(ORIGIN)
 
-        group = VGroup(container)  # para el FadeOut final
-
-        # --- Animación ---
+        group = VGroup(container) 
         self.play(Write(intro8, run_time=write_speed*0.6))
         self.play(FadeIn(row, shift=UP*0.1), run_time=0.8)
         self.wait(0.2)
 
         def blink(mobj, col=YELLOW): return Indicate(mobj, color=col, scale_factor=1.03)
 
-        # Estados iniciales de frames
         k_frame2.set_stroke(opacity=0.0); k_frame3.set_stroke(opacity=0.0)
         i_frame2.set_stroke(opacity=0.0); i_frame3.set_stroke(opacity=0.0)
 
-        # Paso 1 (f1)
         self.play(Create(k_frame1, run_time=0.45)); self.play(blink(ker_parts[0]), run_time=0.35)
         self.play(Create(i_frame1, run_time=0.45)); self.play(blink(im_parts[0]),  run_time=0.35)
 
-        # Paso 2 (f2∘f1)
         self.play(k_frame2.animate.set_stroke(opacity=1.0), run_time=0.45); self.play(blink(ker_parts[1]), run_time=0.35)
         self.play(i_frame2.animate.set_stroke(opacity=1.0), run_time=0.45); self.play(blink(im_parts[1]),  run_time=0.35)
 
-        # Paso 3 (fk∘…∘f1)
         self.play(k_frame3.animate.set_stroke(opacity=1.0), run_time=0.45); self.play(blink(ker_parts[2]), run_time=0.35)
         self.play(i_frame3.animate.set_stroke(opacity=1.0), run_time=0.45); self.play(blink(im_parts[2]),  run_time=0.35)
 
@@ -629,7 +609,6 @@ class MachineLearning(Scene):
         
         phi_top, phi_mid, phi_bot = ValueTracker(0.0), ValueTracker(0.0), ValueTracker(0.0)
 
-        # Top
         def y_top_mean(t):   return 0.05 + 0.15*(t-0.5) + 0.06*np.sin(2*np.pi*t)
         def y_top_sample(t, phi):
             return y_top_mean(t) + 0.10*np.sin(2*np.pi*1.2*t + phi) + 0.06*np.sin(2*np.pi*2.4*t + 0.7*phi)
@@ -637,7 +616,6 @@ class MachineLearning(Scene):
         s1_top   = always_redraw(lambda: dashed_copy(make_curve_in_rect(p_top, lambda t: y_top_sample(t, phi_top.get_value())), 0.22, 0.14))
         s2_top   = always_redraw(lambda: dashed_copy(make_curve_in_rect(p_top, lambda t: y_top_sample(t, phi_top.get_value()+1.7)), 0.22, 0.14, opacity=0.75))
 
-        # Mid
         def y_mid_mean(t):   return 0.35*np.sin(2*np.pi*(t-0.05))
         def y_mid_sample(t, phi):
             return y_mid_mean(t) + 0.12*np.sin(2*np.pi*1.8*t + phi) + 0.05*np.cos(2*np.pi*3.0*t - 0.4*phi)
@@ -645,7 +623,6 @@ class MachineLearning(Scene):
         s1_mid   = always_redraw(lambda: dashed_copy(make_curve_in_rect(p_mid, lambda t: y_mid_sample(t, phi_mid.get_value())), 0.22, 0.14))
         s2_mid   = always_redraw(lambda: dashed_copy(make_curve_in_rect(p_mid, lambda t: y_mid_sample(t, phi_mid.get_value()+1.3)), 0.22, 0.14, opacity=0.75))
 
-        # Bottom: banda + media + dos curvas dashed
         def y_bot_mean(t): return 0.25*np.sin(2*np.pi*2.0*t + 0.2) - 0.02
         def y_bot_upp(t, phi): return y_bot_mean(t) + 0.18 + 0.08*np.sin(2*np.pi*1.4*t + phi)
         def y_bot_low(t, phi): return y_bot_mean(t) - 0.18 + 0.08*np.sin(2*np.pi*1.4*t + phi + np.pi)
