@@ -8,14 +8,14 @@ class TeoriaDecision(Scene):
         write_speed = 5
         body_gap    = 0.32
 
-        # ================= Slide 1: Título =================
+        # ================= Slide 1 =================
         title = Tex("Teoría de Decisión", font_size=52)
         title.set_color_by_tex("Teoría de Decisión", BLUE)
         self.play(Write(title, run_time=write_speed))
         self.wait(1.2)
         self.play(FadeOut(title))
 
-        # ============== Slide 2A: Tasa de clasificación errónea (parte 1) ==============
+        # ============== Slide 2A: Tasa de clasificación errónea (parte 1)  ==============
         s2a_title = Tex(r"Tasa de clasificación errónea\\", font_size=44).to_edge(UP)
         s2a_title.set_color(ORANGE)
 
@@ -48,11 +48,11 @@ class TeoriaDecision(Scene):
         for m in s2a_body: self.play(Write(m, run_time=write_speed))
         self.wait(0.8)
         self.play(FadeOut(VGroup(s2a_title, s2a_body)))
-        # ============== Slide 2C: Visual suma de errores (intermedia, gráfica) ==============
+        # ============== Slide 2C ==============
         axes = Axes(x_range=[-4,4,1], y_range=[0,1.2,0.2],
                     tips=False, axis_config={"color": BLUE}).scale(0.9)
-        g1 = axes.plot(lambda x: np.exp(-((x+1.4)**2)/1.2), color=GREEN)   # p(x|C1)
-        g2 = axes.plot(lambda x: np.exp(-((x-1.4)**2)/1.2), color=PURPLE)  # p(x|C2)
+        g1 = axes.plot(lambda x: np.exp(-((x+1.4)**2)/1.2), color=GREEN)   
+        g2 = axes.plot(lambda x: np.exp(-((x-1.4)**2)/1.2), color=PURPLE) 
 
         th = 0.0
         vline = axes.get_vertical_line(axes.c2p(th,0), color=ORANGE)
@@ -64,19 +64,16 @@ class TeoriaDecision(Scene):
         self.play(Create(axes), Create(g1), Create(g2), run_time=write_speed)
         self.play(Create(vline), FadeIn(r1), FadeIn(r2), run_time=write_speed*0.6)
 
-        # Áreas de error
-        A1 = axes.get_area(g2, x_range=[-4, th], color=YELLOW, opacity=0.35)  # P(x∈R1, C2)
-        A2 = axes.get_area(g1, x_range=[th, 4], color=PINK, opacity=0.35)  # P(x∈R2, C1)
+        A1 = axes.get_area(g2, x_range=[-4, th], color=YELLOW, opacity=0.35) 
+        A2 = axes.get_area(g1, x_range=[th, 4], color=PINK, opacity=0.35)  
         self.play(FadeIn(A1), run_time=0.6)
         self.play(FadeIn(A2), run_time=0.6)
 
-        # Etiquetas de términos (colores SOLO tokens)
         term1 = MathTex(r"\mathbb{P}(x\in R_1, C_2)").next_to(A1, UP, buff=0.3)
         term2 = MathTex(r"\mathbb{P}(x\in R_2, C_1)").next_to(A2, UP, buff=0.3)
         self.play(Write(term1, run_time=write_speed*0.6))
         self.play(Write(term2, run_time=write_speed*0.6))
 
-        # Construcción de la suma final
         eq = MathTex(
             r"\mathbb{P}(\text{error})", "=", r"\mathbb{P}(x\in R_1, C_2)", "+", r"\mathbb{P}(x\in R_2, C_1)",
             font_size=46
@@ -95,7 +92,6 @@ class TeoriaDecision(Scene):
         self.play(TransformFromCopy(term2, eq[4]), run_time=0.9)
         self.play(Indicate(A1, scale_factor=1.02), Indicate(A2, scale_factor=1.02), Indicate(eq), run_time=1.0)
 
-        # Desvanecido limpio antes de "Pérdida esperada"
         self.play(FadeOut(VGroup(term1, term2)), run_time=0.5)
         self.play(FadeOut(eq), run_time=0.5)
         self.play(FadeOut(VGroup(A1, A2)), run_time=0.5)
@@ -134,17 +130,15 @@ class TeoriaDecision(Scene):
         self.wait(0.8)
         self.play(FadeOut(VGroup(s2b_body)), run_time=0.6)
 
-        # ============== Slide 2D: Aciertos con matriz (más separación, C en TEAL, sin título) ==============
-        K = 4                      # >=3
-        cell_w, cell_h = 1.3, 0.9  # tamaño de celdas
+        # ============== Slide 2D ==============
+        K = 4                     
+        cell_w, cell_h = 1.3, 0.9 
 
         grid = VGroup().move_to(ORIGIN)
 
-        # Encabezados
         col_labels = VGroup(*[MathTex(rf"R_{j+1}").set_color(ORANGE).scale(0.9) for j in range(K)])
-        row_labels = VGroup(*[MathTex(rf"C_{i+1}").set_color(TEAL).scale(0.9)   for i in range(K)])  # <- C en TEAL
+        row_labels = VGroup(*[MathTex(rf"C_{i+1}").set_color(TEAL).scale(0.9)   for i in range(K)])  
 
-        # Celdas
         cells = []
         rects = VGroup()
         for i in range(K):
@@ -155,26 +149,21 @@ class TeoriaDecision(Scene):
                 row.append(r); rects.add(r)
             cells.append(row)
 
-        # Disposición en rejilla
         for i in range(K):
             for j in range(K):
                 rects[i*K+j].move_to(
                     RIGHT*(j-(K-1)/2)*cell_w*1.05 + DOWN*(i-(K-1)/2)*cell_h*1.15
                 )
 
-        # Posición de encabezados con MÁS separación del cuadro
         for j, lab in enumerate(col_labels):
-            lab.next_to(rects[j], UP, buff=0.70)      # <-- antes 0.45
+            lab.next_to(rects[j], UP, buff=0.70)      
         for i, lab in enumerate(row_labels):
-            lab.next_to(rects[i*K], LEFT, buff=0.60)  # <-- antes 0.35
+            lab.next_to(rects[i*K], LEFT, buff=0.60) 
 
         grid.add(rects, col_labels, row_labels)
 
-        # (Sin título) — empezamos directamente con la rejilla
         self.play(LaggedStart(Create(rects), lag_ratio=0.06, run_time=0.9))
         self.play(FadeIn(col_labels), FadeIn(row_labels), run_time=0.6)
-
-        # "Probabilidades" visuales (solo ilustración)
         rng = np.array([
             [0.20, 0.04, 0.02, 0.01],
             [0.03, 0.18, 0.05, 0.01],
@@ -190,7 +179,6 @@ class TeoriaDecision(Scene):
                 fills.add(f)
         self.play(FadeIn(fills), run_time=0.7)
 
-        # Diagonal (aciertos) + términos centrados en la celda
         diag_glows = VGroup()
         terms = VGroup()
         for k in range(K):
@@ -218,7 +206,6 @@ class TeoriaDecision(Scene):
         for t in terms:
             self.play(Write(t, run_time=write_speed*0.45))
 
-        # Ecuación con sumatorio
         eqK = MathTex(
             r"\mathbb{P}(\text{correcto})", "=", rf"\sum_{{k=1}}^{{{K}}} \mathbb{{P}}(x\in R_k, C_k)",
             font_size=46
@@ -234,8 +221,7 @@ class TeoriaDecision(Scene):
         self.play(Write(eqK[1], run_time=write_speed*0.3))
         self.play(TransformFromCopy(terms, eqK[2]), run_time=1.0)
         self.play(Indicate(diag_glows, scale_factor=1.02), Indicate(eqK), run_time=1.0)
-
-        # Desvanecido
+        
         self.play(FadeOut(terms), run_time=0.5)
         self.play(FadeOut(eqK), run_time=0.5)
         self.play(FadeOut(diag_glows), run_time=0.4)
@@ -311,7 +297,7 @@ class TeoriaDecision(Scene):
         self.wait(0.8)
         self.play(FadeOut(VGroup(s3b_body)))
 
-        # ============== Slide 4A: La opción de rechazo (párrafo 1) ==============
+        # ============== Slide 4A: La opción de rechazo ==============
         s4a_title = Tex(r"La opción de rechazo\\", font_size=44).to_edge(UP)
         s4a_title.set_color(ORANGE)
 
@@ -332,8 +318,6 @@ class TeoriaDecision(Scene):
         self.wait(0.8)
         self.play(FadeOut(VGroup(s4a_title, s4a_body)))
 
-                # ============== Subsección: Resumen (Sección 5.2.4) ==============
-        # Slide R0 — Encabezado
         r0_title  = Tex(r"Inferencia y decisión", font_size=44).to_edge(UP)
         r0_title.set_color(ORANGE)
         r0_l1 = Tex(
@@ -350,7 +334,7 @@ class TeoriaDecision(Scene):
         self.wait(0.8)
         self.play(FadeOut(VGroup(r0_title, r0_body)), run_time=0.6)
 
-        # Slide R1 — (a) Enfoque generativo (parte 1)
+        # Slide R1 — (a) Enfoque generativo
         r1_title = Tex(r"(a) Enfoque generativo", font_size=44).to_corner(UL)
         r1_title.set_color(BLUE)
         r1_l1 = Tex(
@@ -453,7 +437,8 @@ class TeoriaDecision(Scene):
         for m in r5_body: self.play(Write(m, run_time=write_speed))
         self.wait(0.8)
         self.play(FadeOut(VGroup(r5_title, r5_body)), run_time=0.6)
-        # Slide R7 — En síntesis
+        
+        # Slide R7 
         r7_l1 = Tex(
             r"\textbf{En síntesis:} el enfoque generativo es el más rico (permite $p(x)$ y detección de outliers) pero costoso; "
             r"el discriminativo ofrece buenas clasificaciones con menos esfuerzo; la función discriminante es la más simple pero la menos flexible. "
