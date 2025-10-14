@@ -14,17 +14,13 @@ class SesgoVarianza(Scene):
     def construct(self):
         write_speed = 3
 
-        # ------------------------------------------------------------------
         # Slide Título
-        # ------------------------------------------------------------------
         title = Tex("El equilibrio Sesgo–Varianza", font_size=52).set_color(BLUE)
         self.play(Write(title, run_time=write_speed))
         self.wait(2)
         self.play(FadeOut(title))
 
-        # ------------------------------------------------------------------
         # Slide 1
-        # ------------------------------------------------------------------
         s1_title = Tex(r"¿Qué problema resolvemos en regresión?", font_size=46)
         s1_title.set_color_by_tex("¿Qué problema resolvemos en regresión?", ORANGE)
         s1_a = Tex(
@@ -65,9 +61,7 @@ class SesgoVarianza(Scene):
         self.wait(2)
         self.play(FadeOut(s1_group))
 
-        # ------------------------------------------------------------------
         # Slide 2
-        # ------------------------------------------------------------------
         s2_title = Tex("Mejor predictor con pérdida cuadrática", font_size=40).set_color(ORANGE)
         s2_line = Tex("Si usamos pérdida cuadrática, el mejor predictor de $t$ dado $x$ es:", font_size=32,
                       substrings_to_isolate=[r"$t$", r"$x$"])
@@ -87,9 +81,7 @@ class SesgoVarianza(Scene):
         self.wait(2)
         self.play(FadeOut(s2_group))
 
-        # ------------------------------------------------------------------
         # Slide 3
-        # ------------------------------------------------------------------
         s3_title = Tex("Pérdida esperada", font_size=40).set_color(ORANGE)
         s3_a = Tex("La pérdida esperada se puede escribir como:", font_size=32)
 
@@ -115,9 +107,7 @@ class SesgoVarianza(Scene):
         self.wait(2)
         self.play(FadeOut(s3_group))
 
-        # ------------------------------------------------------------------
         # Slide 4
-        # ------------------------------------------------------------------
         s4_title = Tex("Con datos finitos, el modelo aprendido varía", font_size=40).set_color(ORANGE)
 
         s4_a = Tex(
@@ -154,9 +144,7 @@ class SesgoVarianza(Scene):
         self.wait(2)
         self.play(FadeOut(s4_group))
 
-        # ------------------------------------------------------------------
         # Slide 5
-        # ------------------------------------------------------------------
         s5_title = Tex("Derivación: Sesgo–Varianza", font_size=40)
         s5_eq = MathTex(
             r"\begin{aligned}"
@@ -175,10 +163,8 @@ class SesgoVarianza(Scene):
             self.play(Write(mob, run_time=write_speed))
         self.wait(2)
         self.play(FadeOut(s5_group))
-
-        # ------------------------------------------------------------------
+        
         # Slide 6:
-        # ------------------------------------------------------------------
         s6_title = Tex("Resultado integrado sobre $x$", font_size=40).set_color(ORANGE)
         s6_eq1 = MathTex(
             r"\text{error esperado} \;=\; (\text{sesgo})^{2} \;+\; \text{varianza} \;+\; \text{ruido}",
@@ -201,9 +187,7 @@ class SesgoVarianza(Scene):
         self.wait(2)
         self.play(FadeOut(s6_group))
 
-        # ------------------------------------------------------------------
         # Slide 7:
-        # ------------------------------------------------------------------
         s7_title = Tex("Interpretación de los términos", font_size=40).set_color(ORANGE)
         s7_a = Tex(
             r"\textbf{Sesgo:} diferencia sistemática entre la predicción promedio y la función ideal $h(x)$.",
@@ -228,9 +212,7 @@ class SesgoVarianza(Scene):
         self.wait(2)
         self.play(FadeOut(s7_group))
 
-        # ------------------------------------------------------------------
         # Slide 8
-        # ------------------------------------------------------------------
         s8_title = Tex("Consecuencia práctica", font_size=40).set_color(ORANGE)
         s8_a = Tex("Modelos muy simples suelen tener alto sesgo y baja varianza.", font_size=32)
         s8_b = Tex("Modelos muy flexibles tienden a bajo sesgo y alta varianza.", font_size=32)
@@ -241,6 +223,7 @@ class SesgoVarianza(Scene):
             self.play(Write(mob, run_time=write_speed))
         self.wait(2)
         self.play(FadeOut(s8_group))
+
 
 
 
