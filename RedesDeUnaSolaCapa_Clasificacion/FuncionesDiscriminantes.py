@@ -9,14 +9,13 @@ class FuncionesDiscriminantes(Scene):
         subtitle_gap = 0.60
         body_gap     = 0.30
 
-        # ================= Slide 1: Título =================
+        # ================= Slide 1 =================
         title = Tex("Funciones Discriminantes", font_size=52)
         title.set_color_by_tex("Funciones Discriminantes", BLUE)
         self.play(Write(title, run_time=write_speed))
         self.wait(1.2)
         self.play(FadeOut(title))
 
-        # ================= Diagrama centrado: x -> g -> {C1,...,Ck} =================
         frase = Tex(
             r"Un discriminante es una función que toma un vector de entrada ",
             r"$x$",
@@ -68,7 +67,7 @@ class FuncionesDiscriminantes(Scene):
 
         self.play(FadeOut(VGroup(frase,row, a1, a2, x_right_ck)))
 
-        # ================= Slide 2B: Ítem 1 — "Dos casos" =================
+        # ================= Slide 2B =================
         i1_title = Tex(r"\textbf{Dos casos:}\\", font_size=40)
         i1_title.set_color(ORANGE)
 
@@ -103,8 +102,7 @@ class FuncionesDiscriminantes(Scene):
             self.play(Write(m, run_time=write_speed))
         self.wait(0.8)
         self.play(FadeOut(slide2b))
-
-        # ================= Mini-demo simbólica mejorada =================
+        
         g_box   = RoundedRectangle(corner_radius=0.28, width=3.6, height=1.4, color=TEAL_B)
         g_label = MathTex(r"y", color=YELLOW).scale(1.6).move_to(g_box.get_center())
         g_group = VGroup(g_box, g_label)
@@ -170,7 +168,7 @@ class FuncionesDiscriminantes(Scene):
 
         self.play(FadeOut(VGroup(y_expr, row, a_in, a_c1, a_c2, cond_lt, ring1, dot1, x_right_c1, x_right_c2)))
 
-        # ================= Slide 3: Item 2 (todo junto, centrado) =================
+        # ================= Slide 3 =================
         i2_title = Tex(r"\textbf{Múltiples casos:}\\", font_size=40)
         i2_title.set_color(ORANGE)
         i2_text1 = Tex(
@@ -208,7 +206,7 @@ class FuncionesDiscriminantes(Scene):
         self.wait(0.8)
         self.play(FadeOut(slide3))
 
-        # ================= K>2: asignación por máximo =================
+        # ================= K>2 =================
         eq_top = MathTex(r"y_k(x) = w_k^T x + w_{k_0}", font_size=42)
         for tok, col in [(r"y_k", YELLOW), (r"x", BLUE), (r"w_k", GREEN), (r"w_{k_0}", GREEN)]:
             eq_top.set_color_by_tex(tok, col)
@@ -271,7 +269,7 @@ class FuncionesDiscriminantes(Scene):
 
         self.play(FadeOut(VGroup(eq_top, row, a_in, final_arrow, yk_tok, rule_head, cond_main, cond_quant, x_right_ck)))
 
-        # ================= Slide 4: Item 3 (todo junto) =================
+        # ================= Slide 4 =================
         i3_title = Tex(r"\textbf{Codificación 1 de $K$}\\", font_size=40)
         i3_title.set_color(ORANGE)
 
@@ -316,7 +314,7 @@ class FuncionesDiscriminantes(Scene):
         self.wait(0.8)
         self.play(FadeOut(slide4))
 
-        # ================= Slide 5: Item 4 (parte 1) =================
+        # ================= Slide 5 =================
         i4_title = Tex(r"\textbf{Mínimos cuadrados para clasificación.}\\", font_size=40)
         i4_title.set_color(ORANGE)
 
@@ -349,7 +347,7 @@ class FuncionesDiscriminantes(Scene):
         self.wait(0.6)
         self.play(FadeOut(slide5))
 
-        # ================= Slide 6: Item 4 (parte 2) =================
+        # ================= Slide 6 =================
         i4_p3 = Tex(
             r"donde ", r"$\widetilde{W}$", r" es una matriz cuya columna $k$ comprende vector ",
             r"$(D+1)$", r"-dimensional ", r"$\widetilde{w}_k$", r" = ", r"$(w_{k0},w_k^T)^T$", r" y ",
