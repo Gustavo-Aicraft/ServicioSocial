@@ -7,7 +7,7 @@ class Clasificadores(Scene):
     def construct(self):
         write_speed = 5
 
-        # ========== SLIDE 1 (título) ==========
+        # ========== SLIDE 1==========
         t0 = Tex("Clasificadores generativos", font_size=52)
         t0.set_color_by_tex("Clasificadores generativos", BLUE)
         self.play(Write(t0, run_time=write_speed)); self.wait(0.8); self.play(FadeOut(t0))
