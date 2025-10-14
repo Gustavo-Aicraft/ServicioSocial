@@ -211,7 +211,7 @@ class RegresionLineal(Scene):
             p = arrow.point_from_proportion(t)
             v = arrow.get_end() - arrow.get_start()
             v = v / np.linalg.norm(v)
-            n = np.array([-v[1], v[0], 0.0]) * side  # normal 90°
+            n = np.array([-v[1], v[0], 0.0]) * side  
             lab.move_to(p + dn * n)
             bg = BackgroundRectangle(lab, fill_color=BLACK, fill_opacity=1.0, stroke_width=0, buff=0.02)
             return VGroup(bg, lab)
@@ -375,3 +375,4 @@ class RegresionLineal(Scene):
         )))
 
 #manim -pqh RegresiónLineal.py RegresionLineal
+
