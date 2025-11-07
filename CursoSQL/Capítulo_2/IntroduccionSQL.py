@@ -158,16 +158,6 @@ TITLE_1 = r"""
 {\fontsize{28}{34}\selectfont \textcolor{purple}{Fundamentos de bases de datos para SQL}}
 """
 
-CONTENT_1 = r"""
-% Contenido del Slide 1 (LaTeX). Pega el bloque EXACTO aquí.
-% Ejemplo NO vinculante (sólo de referencia):
-% \begin{itemize}
-%   \item ¿Qué es SQL? Lenguaje de consulta estructurado
-%   \item Tablas, filas, columnas
-%   \item Consultas SELECT básicas
-% \end{itemize}
-"""
-
 # --- Slide 2
 CONTENT_2 = r"""
 \textbf{SQL} son las siglas de  Lenguaje de Consulta Estructurada (Structured Query Language), es un tipo de lenguaje declarativo desarrollado por IBM alredededor de 1947 con el propósito de ser usado para administrar y consultar la información almacenada en bases de datos.
